@@ -9,6 +9,9 @@ var filePath = './Tests/3JN.usfm';
 
 fs.readFile( filePath, 'utf8', function(err, data) {
 
+if(data.match(/\\c/)){
+	console.log("yes")
+}
 	var ext = fileExtension(filePath);
 
 	var toJSON = usfm.toJSON(data);
@@ -36,34 +39,28 @@ fs.readFile( filePath, 'utf8', function(err, data) {
    	function validateChapter() {
 
 		var bookData = toJSON.chapters;
-
+		
 		var chapterNum = [];
-		chapterNum = bookData[0].number;
+		for (var i in bookData) {
+			chapterNum.push(bookData[i].number)
+		
+			var verses = bookData[i].verses;
+			// console.log(verses)
+
+			var verseNum = [];
+			for(var i = 0; i < verses.length; i++) {
+	          verseNum.push(verses[i].number);
+	      	}
+	      	var missing ;
+	      	for(j=1; j<= verses.length-1; j++){
+		          if(verseNum[j-1] != j){
+		          	missing = j;
+		          	// console.log(missing);
+		          }
+	      		}
+      	}
 		// console.log(chapterNum);
-		var verses = bookData[0].verses;
-		console.log(verses.length)
 
-		var verseNum = [];
-		for(var i = 0; i < verses.length; i++) {
-          verseNum.push(verses[i].number);
-      	}
-      	console.log(verseNum);
-
-      	var duplicateVerseNum = [];
-      	for (var i = 0; i < verseNum.length - 1; i++) {
-      		if (verseNum[i + 1] == verseNum[i]) {
-        		duplicateVerseNum.push(verseNum[i]);
-    		}
-      	}
-      	console.log(duplicateVerseNum);
-
-      	var outs= [], L= verseNum.length, i= 0, prev;
-		while(i<L){
-    		prev= verseNum[i]; 
-    		while(verseNum[++i]<prev) outs.push(i);
-		}
-		console.log(outs);
-      	
 	}
 
 });
