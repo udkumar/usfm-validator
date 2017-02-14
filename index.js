@@ -5,28 +5,29 @@ var fileExtension = require('file-extension');
 
 var usfm = require('usfm-parser');
 
-var filePath = './Tests/3JN.usfm';
+var filePath = './Tests/1JN.usfm';
 
 fs.readFile( filePath, 'utf8', function(err, data) {
 
 if(data.match(/\\c/)){
-	console.log("yes")
+	// console.log("yes")
 }
 	var ext = fileExtension(filePath);
 
 	var toJSON = usfm.toJSON(data);
-	var idTag = toJSON.headers['id'];
+	var idTag = toJSON.headers.id;
+	console.log(toJSON.headers['id'])
 
 	if( ext == 'usfm' || ext == 'sfm'){	
 	    
 		var regEx = /(\d[A-Z]{2})|(\w[A-Z]{2})/;
 	    // the three letter code in the \id field must be capitalized
-	    if (idTag.match(regEx)){
-	    	validateChapter();
-	    }
-	    else{
-	    	console.log('\id tag is not fulfilled according to the usfm requirement');
-	    }
+	    // if (idTag.match(regEx)){
+	    	// validateChapter();
+	    // }
+	    // else{
+	    // 	console.log('\id tag is not fulfilled according to the usfm requirement');
+	    // }
     }
 	else {
         console.log(' Only usfm file is allowed');
@@ -59,7 +60,7 @@ if(data.match(/\\c/)){
 		          }
 	      		}
       	}
-		// console.log(chapterNum);
+		console.log(chapterNum);
 
 	}
 
