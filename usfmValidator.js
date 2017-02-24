@@ -1,9 +1,9 @@
 var validator = require('./validator.js');
 // var lines = require('./validator').lines;
 
-console.log(validator.lines)
+// console.log(validator.lines)
 
-function usfmValidate(line){
+exports.usfmValidate = function(line){
     
     
 }

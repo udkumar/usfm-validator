@@ -57,50 +57,50 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
             data.count = count;    
         }
         lines.push(data);
-
     })
     .on('error', function(){
         console.log('Error while reading file.');
     })
-    .on('end', function(lines){
+    .on('end', function(){
 
         /*  #Validation for Minimum USFM Requirements in given usfm file described here:
-            https://git.door43.org/Door43/ContentTechs/wiki/Minimum-USFM-Requirements
-            Validation Levels include
-
+            https://git.door43.org/Door43/ContentTechs/wiki/Minimum-USFM-Requirementss
         */
 
-        usfmValidate = function(){
-            for (var i in lines) {
-                if(lines[i].marker === 'id'){
-                    var value = lines[i].value;
-                    markerID = value.split(" ")[0];
-                    count = lines[i].count;
-                    // console.log(markerID)
-                    var regEx = /(\d[A-Z]{2})|(\w[A-Z]{2})/;
-                    if (markerID.match(regEx)){
-                        console.log("The \\id marker of this usfm file is "+"'"+ markerID +"'"+" in line number "+ count)
-
-                    }
-                    else{
-                        console.log("ID marker is not validated acc to minimum usfm requirement--->"+"'"+markerID+"'")
-                    }
+        for (var i in lines) {
+            // marker \\id check
+            if(lines[i].marker === 'id'){
+                var markerID = lines[i].value.split(" ")[0];
+                count = lines[i].count;
+                var regEx = /(\d[A-Z]{2})|(\w[A-Z]{2})/;
+                if (markerID.match(regEx)){
+                    console.log("The \\id marker of this usfm file is "+"'"+ markerID +"'"+" found in line "+ count)
+                }
+                else{
+                    console.log("ID marker is not validated acc to minimum usfm requirement--->"+"'"+markerID+"'")
                 }
             }
+            for(j=0;j<3;j++){
+                console.log("|")
+            }
+            //marker \\ide check
+            if(lines[i].marker === 'ide'){
+                var markerIde = lines[i].value;
+                count = lines[i].count;
+                var regEx = /(UTF-8 || UTF-16 || CP-1252 || CP-1251 )/;
+                if(markerIde.match(regEx)){
+                    console.log("The \\ide marker of this file is "+"'"+ markerIde +"'"+" found in line "+ count);
+                }
+            }
+            else{
+                    console.log("Ide marker is not validated acc to minimum usfm requirement--->"+"'"+markerIde+"'")
+            }  
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if(!markerID){
+                console.log("usfm-validator could not find \\id marker in this given file.");
+            }
+        /* end of validation check */
+        
         // chapter validations
         var chapNum = [];
         for(var i in lines){
@@ -108,7 +108,6 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
                 chapNum.push(lines[i].value)
             }
         }
-        
         //missing chapter number
         var missing;
         for(j=1; j <= chapNum.length; j++){
