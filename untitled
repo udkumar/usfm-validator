@@ -1,0 +1,24 @@
+
+
+Arr;
+
+for(i=0;i<Arr.length;i++){
+	if(condition1){
+		found condition1 in Arr
+	}
+	else{
+		not found 
+	}
+	if(condition2){
+		found condition2 in Arr
+	}
+	else{
+		not found
+	}
+	if(condition3){
+		found...
+	}
+	else{
+		
+	}
+}

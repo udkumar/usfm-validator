@@ -17,7 +17,7 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
         var data = {} ;
         var dataArr = line.split("\\");
         dataArr = dataArr.splice(1, dataArr.length);
-        
+
         // loop through each lines
         for(var i=0; i<dataArr.length; i++){
            
@@ -38,23 +38,35 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
             }
             
             // handle inline markers as children of the corresponding line
+            data.children = [];
             if(dataArr.length > 1){
-                data.children = [];
-                childArr = dataArr.slice(1)
+                childArr = dataArr.slice(1);
                 
-                //object for inline markers
-                var obj = {}
-                childArr.forEach(function(value, index, array){
-                    obj.marker = childArr[index].split(" ")[0] ;
-                    obj.value = childArr[index].substr(childArr[index].indexOf(' ')+1)
-                })
-                data.children.push(obj);
+                //inline markers structure starts from here
+                var obj = {};
+                for (var j=0; j<childArr.length; j++) {
+                    var inlineArr = childArr[j].split(" ");
+                    // object for inline markers
+                   
+                    inlineMarker = inlineArr[0];
+                    inlineValue = childArr[j].substr(childArr[j].indexOf(' ')+1) ;
+                    // null values if only marker exist
+                    if(inlineArr[1] == "" || inlineValue.length == 1){
+                        obj.marker = inlineMarker;
+                        obj.value = "null";
+                    }
+                    else{
+                        obj.marker = inlineMarker;
+                        obj.value = inlineValue;
+                    }
+                    data.children.push(obj);                
+                }
             }
             else{
                 data.children = "null";
             }
             // count holds the line numbers in each line
-            data.count = count;    
+            data.count = count;  
         }
         lines.push(data);
     })
@@ -62,9 +74,8 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
         console.log('Error while reading file.');
     })
     .on('end', function(){
-        // console.log(lines)
-
-        /*  #Validation for Minimum USFM Requirements in given usfm file described here:
+        
+        /*  Validation for Minimum USFM Requirements in given usfm file described here:
             https://git.door43.org/Door43/ContentTechs/wiki/Minimum-USFM-Requirementss
         */
 
@@ -85,7 +96,9 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
                     console.log("ID marker is not validated acc to minimum usfm requirement--->"+"'"+markerID+"'")
                 }
             }
-            
+            // else{
+            //     console.log("The \\id marker of this usfm file is not found here")
+            // }
             //marker \\ide check
             if(lines[i].marker === 'ide'){
                 var markerIde = lines[i].value;
@@ -144,9 +157,14 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
                 count = lines[i].count;
                 console.log("The \\c marker of this file for chapter "+"'"+ markerChapter +"'"+"is found in line "+ count);
                 chapNum.push(markerChapter);
-                chapterCheck();
             }
 
+            //marker \\p check
+            if(lines[i].marker === 'p'){
+                var markerPara = lines[i].value;
+                count = lines[i].count;
+                console.log("The \\p marker of this file is found in "+ count)
+            }
             //marker \\v check
             if(lines[i].marker === 'v'){
                 var markerVerse = lines[i].number;
@@ -180,6 +198,7 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
         if(!markerID){
                 console.log("usfm-validator could not find \\id marker in this given file.");
             }
+        // else(mar)
         /* end of validation check */
         
 
