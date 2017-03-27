@@ -114,7 +114,7 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
                     console.log("Info: The \\ide marker is "+"'"+ markerIde +"'"+" found in line "+ count);
                 }
                 else{
-                  console.log("Warning: The \\ide marker should contain a character encoding specification in line "+ count)
+                  console.log("Error: The \\ide marker should contain a character encoding specification in line "+ count)
                 }
             }
 
