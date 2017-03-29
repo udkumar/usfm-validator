@@ -1,12 +1,35 @@
-var fs = require('fs')
-    , util = require('util')
-    , stream = require('stream')
-    , es = require('event-stream');
+
+var validator = require('./validator.js');
+
+console.log(validator);
+var i=0;
+
+function isMarkerId(line) {
+	if (!(line != null)) {
+		 console.log("Error: The initial USFM marker in any scripture text file is \\id and it is not found");
+		return false;
+	} else {
+		if(lines[i].marker === 'id'){
+            // console.log("Check for File identification marker '\\id' starts here ")
+            var markerID = lines[i].value.split(" ")[0];
+            count = lines[i].count;
+            var regEx = /(\d[A-Z]{2})|(\w[A-Z]{2})/;
+            if (markerID.match(regEx)){
+                console.log("Info: The \\id marker is "+"'"+ markerID +"'"+" found in line "+ count)
+                return
+            }
+            else{
+                console.log("Warning: The \\id marker is not validated according to minimum usfm requirement--->"+"'"+markerID+"'");
+                console.log("The CODE is a standard 3 letter scripture book abbreviation found here:")
+                console.log("http://ubsicap.github.io/usfm/identification/books.html");
+                return;
+            }
+        }
+    
+    }
+};
 
 
-var validator = require('./validator');
-
-console.log(validator.s);
 
 // /*  Validation for Minimum USFM Requirements is done on the basis of this documented details:
 //             https://git.door43.org/Door43/ContentTechs/wiki/Minimum-USFM-Requirementss

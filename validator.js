@@ -67,14 +67,18 @@ var s = fs.createReadStream('./Tests/3JN.usfm')
             data.count = count;  
         }
         lines.push(data);
+        // console.log(lines);
     })
     .on('error', function(){
         console.log('Error while reading file.');
     })
     .on('end', function(){
-      console.log(lines)
+      // console.log(lines)
+      
         console.log('Read entire file.')
+        return lines
     })
 );
 
-module.export = s;
+console.log(lines);
+module.exports = s;
