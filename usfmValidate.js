@@ -1,7 +1,7 @@
 
 var validator = require('./validator.js');
 
-console.log(validator.s);
+console.log(validator);
 var i=0;
 
 function isMarkerId(line) {
