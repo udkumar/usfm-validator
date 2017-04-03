@@ -4,6 +4,7 @@ var fs = require('fs')
     , es = require('event-stream');
 
 // var parse = require('./parse.js')
+var usfmValidate = require('./usfmValidate.js')
 
 var input = './Tests/3JN.usfm';
 
@@ -78,15 +79,18 @@ var s = fs.createReadStream(input)
         }
         lines.push(data);
         // console.log(lines)
-        return lines;
+        // return lines;
     })
     .on('error', function(){
         console.log('Error while reading file.');
     })
     .on('end', function(){
-        output.push(lines)
-        // console.log(output)
+        // output.push(lines)
+        // console.log(lines)
+        usfmValidate.Validate(lines)
         console.log('Read entire file.')
     })
 );
 module.exports = s;
+
+// console.log(usfmValidate)
