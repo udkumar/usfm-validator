@@ -45,7 +45,6 @@ var s = fs.createReadStream(input)
             data.children = [];
             if(dataArr.length > 1){
                 childArr = dataArr.slice(1);
-                // console.log(childArr)
                 
                 //inline markers structure starts from here
                 var obj = {};
@@ -67,9 +66,7 @@ var s = fs.createReadStream(input)
                         obj.value = inlineValue;
                     }
                     data.children.push(obj); 
-                    // console.log(data.children)
                 }
-
             }
             else{
                 data.children = "null";
@@ -78,19 +75,15 @@ var s = fs.createReadStream(input)
             data.count = count;  
         }
         lines.push(data);
-        // console.log(lines)
-        // return lines;
     })
     .on('error', function(){
         console.log('Error while reading file.');
     })
     .on('end', function(){
-        // output.push(lines)
         // console.log(lines)
         usfmValidate.Validate(lines)
-        console.log('Read entire file.')
+        // console.log('Read entire file.')
     })
 );
 module.exports = s;
 
-// console.log(usfmValidate)
