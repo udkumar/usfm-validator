@@ -23,7 +23,8 @@ var s = fs.createReadStream(input)
         dataArr = dataArr.splice(1, dataArr.length);
 
         // loop through each lines
-        for(var i=0; i<dataArr.length; i++){
+        // for(var i=0; i<dataArr.length; i++){
+        if(dataArr.length != 0){
            
             //marker and values from each line
             data.marker = dataArr[0].split(" ")[0] ; 
@@ -43,45 +44,38 @@ var s = fs.createReadStream(input)
             
             // handle inline markers as children of the corresponding line
             data.children = [];
+
             if(dataArr.length > 1){
                 childArr = dataArr.slice(1);
-                
+
                 //inline markers structure starts from here
-                var obj = {};
-                for (var j=0; j<childArr.length; j++) {
-                    var inlineArr = childArr[j].split(" ");
-                    // console.log(inlineArr[1])
-                    
+                for (var j = 0; j < childArr.length; j++) {
+                    let split = childArr[j].split(" ");
                     // object for inline markers
-                    inlineMarker = childArr[j].split(" ")[0];
-                    inlineValue = childArr[j].substr(childArr[j].indexOf(' ')+1);
-                    
-                    // null values if only marker exist
-                    if(inlineArr[1] == "" || inlineValue.length == 1){
-                        obj.marker = inlineMarker;
-                        obj.value = "null";
-                    }
-                    else{
-                        obj.marker = inlineMarker;
-                        obj.value = inlineValue;
-                    }
-                    data.children.push(obj); 
+                    // ternary operator handles if only markers are exist with out any values
+                    data.children.push({
+                        marker: split[0],
+                        value: ((split[1] == "" ||split[1] == undefined) ? null : split.slice(1).join(" "))
+                    });
                 }
             }
             else{
                 data.children = "null";
             }
             // count holds the line numbers in each line
-            data.count = count;  
+            data.count = count;
+            lines.push(data);  
         }
-        lines.push(data);
+        else{
+            console.log("newline")
+        }
     })
     .on('error', function(){
         console.log('Error while reading file.');
     })
     .on('end', function(){
-        // console.log(lines)
-        usfmValidate.Validate(lines)
+        console.log(lines)
+        // usfmValidate.Validate(lines)
         // console.log('Read entire file.')
     })
 );
