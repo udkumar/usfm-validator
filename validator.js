@@ -42,8 +42,7 @@ var s = fs.createReadStream(input)
             }
             
             // handle inline markers as children of the corresponding line
-            // data.children = [];
-            child = [];
+            data.children = [];
 
             if(dataArr.length > 1){
                 childArr = dataArr.slice(1);
@@ -53,7 +52,7 @@ var s = fs.createReadStream(input)
                     let split = childArr[j].split(" ");
                     // object for inline markers
                     // ternary operator handles if only markers exist with out any values
-                    child.push({
+                    data.children.push({
                         marker: split[0],
                         value: ((split[1] == "" ||split[1] == undefined) ? "null" : split.slice(1).join(" "))
                     });
