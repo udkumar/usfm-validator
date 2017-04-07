@@ -22,8 +22,7 @@ var s = fs.createReadStream(input)
         var dataArr = line.split("\\");
         dataArr = dataArr.splice(1, dataArr.length);
 
-        // loop through each lines
-        // for(var i=0; i<dataArr.length; i++){
+        // if the line is not empty
         if(dataArr.length != 0){
            
             //marker and values from each line
@@ -43,7 +42,8 @@ var s = fs.createReadStream(input)
             }
             
             // handle inline markers as children of the corresponding line
-            data.children = [];
+            // data.children = [];
+            child = [];
 
             if(dataArr.length > 1){
                 childArr = dataArr.slice(1);
@@ -52,10 +52,10 @@ var s = fs.createReadStream(input)
                 for (var j = 0; j < childArr.length; j++) {
                     let split = childArr[j].split(" ");
                     // object for inline markers
-                    // ternary operator handles if only markers are exist with out any values
-                    data.children.push({
+                    // ternary operator handles if only markers exist with out any values
+                    child.push({
                         marker: split[0],
-                        value: ((split[1] == "" ||split[1] == undefined) ? null : split.slice(1).join(" "))
+                        value: ((split[1] == "" ||split[1] == undefined) ? "null" : split.slice(1).join(" "))
                     });
                 }
             }
@@ -65,9 +65,6 @@ var s = fs.createReadStream(input)
             // count holds the line numbers in each line
             data.count = count;
             lines.push(data);  
-        }
-        else{
-            console.log("newline")
         }
     })
     .on('error', function(){
