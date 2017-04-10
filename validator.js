@@ -15,7 +15,7 @@ var count = 0;
 var s = fs.createReadStream(input)
     .pipe(es.split())
     .pipe(es.mapSync(function(line){
-        count ++;
+        count ++; 
       
         //object element for each line
         var data = {} ;
@@ -57,6 +57,7 @@ var s = fs.createReadStream(input)
                         value: ((split[1] == "" ||split[1] == undefined) ? "null" : split.slice(1).join(" "))
                     });
                 }
+                console.log(data.children)
             }
             else{
                 data.children = "null";
@@ -71,6 +72,7 @@ var s = fs.createReadStream(input)
     })
     .on('end', function(){
         console.log(lines)
+        return lines
         // usfmValidate.Validate(lines)
         // console.log('Read entire file.')
     })
