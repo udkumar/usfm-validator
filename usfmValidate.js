@@ -1,6 +1,8 @@
 
 var validator = require('./validator.js');
 
+var markerOccurOnce = ["id", "ide", "h", "toc1", "toc2", "toc3", "mt"],
+    markerRepeating = ["p", "c", "v"];
 
 var tags = ["id","ide"],
    more_occurrence = [],
@@ -46,15 +48,15 @@ exports.Validate  = function(lines) {
 	   	}
 	}
 		
-		var check = function(){
-			console.log("here#############")
-			if(marker.match(regEx)){
-                console.log("Info: The \\ide marker is "+"'"+ marker +"'"+" found in line "+ count);
-            }
-            else{
-              console.log("Error: The \\ide marker should contain a character encoding specification in line "+ count)
-            }	
-		}
+		// var check = function(){
+			// console.log("here#############")
+			// if(marker.match(regEx)){
+   //              console.log("Info: The \\ide marker is "+"'"+ marker +"'"+" found in line "+ count);
+   //          }
+   //          else{
+   //            console.log("Error: The \\ide marker should contain a character encoding specification in line "+ count)
+   //          }	
+		// }
 	   	// marker \\ide check
         if((lines[i].marker === 'ide') && (tag_ide == 0)){
             var markerIde = lines[i].value;
@@ -62,18 +64,18 @@ exports.Validate  = function(lines) {
             var regEx = /(UTF-8|UTF-16|CP-1252|CP-1251)/;
             check()
 
-            // if(markerIde.match(regEx)){
-                // console.log("Info: The \\ide marker is "+"'"+ markerIde +"'"+" found in line "+ count);
-            // }
-            // else{
-            //   console.log("Error: The \\ide marker should contain a character encoding specification in line "+ count)
-            // }
+            if(markerIde.match(regEx)){
+                console.log("Info: The \\ide marker is "+"'"+ markerIde +"'"+" found in line "+ count);
+            }
+            else{
+              console.log("Error: The \\ide marker should contain a character encoding specification in line "+ count)
+            }
             tag_ide ++;
         }else if((lines[i].marker === 'ide') && (tag_ide > 0)){
 	     	console.log("Error: Marker ide is showing more than one times....in line " + lines[i].count);
-        }else if((lines[i].marker != 'ide') && (tag_ide == 0)){
-          	console.log("\\ide marker is not found "+ lines[i].count)
-          	tag_ide ++;
+        // }else if((lines[i].marker != 'ide') && (tag_ide == 0)){
+        //   	console.log("\\ide marker is not found "+ lines[i].count)
+        //   	tag_ide ++;
         }
 }
 

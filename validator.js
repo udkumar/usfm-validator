@@ -5,6 +5,7 @@ var fs = require('fs')
 
 // var parse = require('./parse.js')
 var usfmValidate = require('./usfmValidate.js')
+var check = require('./check.js')
 
 var input = './Tests/3JN.usfm';
 
@@ -57,7 +58,7 @@ var s = fs.createReadStream(input)
                         value: ((split[1] == "" ||split[1] == undefined) ? "null" : split.slice(1).join(" "))
                     });
                 }
-                console.log(data.children)
+                // console.log(data.children)
             }
             else{
                 data.children = "null";
@@ -71,9 +72,10 @@ var s = fs.createReadStream(input)
         console.log('Error while reading file.');
     })
     .on('end', function(){
-        console.log(lines)
-        return lines
+        // console.log(lines)
+        // return lines
         // usfmValidate.Validate(lines)
+        check.findMarker(lines)
         // console.log('Read entire file.')
     })
 );
