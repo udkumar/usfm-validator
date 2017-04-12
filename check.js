@@ -1,4 +1,4 @@
-var convertor = require('./convertor.js');
+var validator = require('./validator.js');
 
 var result = [];
 
@@ -6,6 +6,7 @@ exports.findMarker = function(lines){
 	for (var i = 0; i < lines.length; i++) {
 		var marker = lines[i].marker;
 		var line = lines[i];
+		console.log(line)
 		checkMarker(marker, line);
 	}
 	console.log(result)
