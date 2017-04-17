@@ -19,10 +19,8 @@ exports.Validate  = function(lines) {
  	var tag_id = 0,
     	tag_ide = 0,
     	h = 0;
-    
 
  	for (var i in lines){
-
  		// marker \\id check
         // File identification. 
         // This is the initial USFM marker in any scripture text file.
@@ -48,15 +46,6 @@ exports.Validate  = function(lines) {
 	   	}
 	}
 		
-		// var check = function(){
-			// console.log("here#############")
-			// if(marker.match(regEx)){
-   //              console.log("Info: The \\ide marker is "+"'"+ marker +"'"+" found in line "+ count);
-   //          }
-   //          else{
-   //            console.log("Error: The \\ide marker should contain a character encoding specification in line "+ count)
-   //          }	
-		// }
 	   	// marker \\ide check
         if((lines[i].marker === 'ide') && (tag_ide == 0)){
             var markerIde = lines[i].value;
