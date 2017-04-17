@@ -21,10 +21,14 @@ function doSomething(){
 }
 
 exports.findMarker = function(lines){
+	test = [ { marker: 'ide', value: 'UTF-8', children: 'null', count: 1 }]
+
+	testArray = 'ide' in test;
+
 	for (var i = 0; i < lines.length; i++) {
 		var marker = lines[i].marker;
 		var line = lines[i];
-		checkMarker(marker, line);	
+		checkMarker(marker, line, lines);	
 	}
 }
 
@@ -44,7 +48,8 @@ var invalid_id = false,
 	invalid_toc3 = false,
 	invalid_mt = false;
 
-function checkMarker(marker, line){
+function checkMarker(marker, line, lines){
+	console.log(lines);
 	if((marker === 'id')){
 		count = line.count;
 		tag_id ++;
@@ -55,8 +60,8 @@ function checkMarker(marker, line){
 		invalid_id = true;
 		console.log("id is available in multiple times");
 	}
-	else {
-
+	else if($.inArray("id", lines) !== -1){
+		console.log("hellooooo");
 	}
 
 	if((marker === 'ide')){
