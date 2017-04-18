@@ -16,6 +16,15 @@ var s = fs.createReadStream(input)
   .pipe(es.split())
   .pipe(es.mapSync(function(line){
     count ++; 
+    
+    var firstChar = line.trim().split('')[0];
+
+    if(firstChar !== "\\" && firstChar !== undefined){
+        console.log("yes a line without slash also present "+ count)
+    }
+    else{
+        console.log("no")
+    }
   
     //object element for each line
     var data = {} ;
@@ -69,6 +78,7 @@ var s = fs.createReadStream(input)
   .on('end', function(){
     // usfmValidate.Validate(lines)
     check.findMarker(lines)
+    console.log(lines)
   })
   );
 
