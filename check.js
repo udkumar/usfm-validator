@@ -47,10 +47,13 @@ function checkMarker(marker, line){
 	else if((tag_id == 2)){
 		count = line.count;
 		tag_id ++;
-		invalid_id = true;
-		console.log("id is available in multiple times");
+		console.log("id is available in multiple times "+count);
 	}
 	else {
+		if((tag_id == 0)&& (invalid_id ==false)){
+			invalid_id = true;
+			console.log("id is not present in this file")
+		}
 
 	}
 
