@@ -5,22 +5,6 @@ var result = [];
 var markerOccurOnce = ["id", "ide", "h", "toc1", "toc2", "toc3", "mt"],
 		markerRepeating = ["p", "c", "v"];
 
-var tag_id = 0;
-var $;
-
-require("jsdom").env("", function(err, window) {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  $ = require("jquery")(window);
-  doSomething();
-});
-
-function doSomething(){
-  var deferred = $.Deferred();
-}
-
 exports.findMarker = function(lines){
 	for (var i = 0; i < lines.length; i++) {
 		var marker = lines[i].marker;
@@ -48,7 +32,16 @@ var invalid_id = false,
 
 function checkMarker(marker, line){
 	if((marker === 'id')){
+		// if marker is found then check the validation for the marker value
 		count = line.count;
+		var markerID = line.value.split(" ")[0];
+     	var regEx = /(\d[A-Z]{2})|(\w[A-Z]{2})/;
+
+     	if ((!markerID.match(regEx))&& (tag_id === 0)){
+       		console.log("Warning: The \\id marker is not validated according to minimum usfm requirement in line "+count+" ---> "+"'"+markerID+"'");
+	       	console.log("The CODE is a standard 3 letter scripture book abbreviation found here:");
+	       	console.log("http://ubsicap.github.io/usfm/identification/books.html");   	
+     	}
 		tag_id ++;
 	}
 	else if((tag_id == 2)){

@@ -20,56 +20,55 @@ var s = fs.createReadStream(input)
     var firstChar = line.trim().split('')[0];
 
     if(firstChar !== "\\" && firstChar !== undefined){
-        console.log("yes a line without slash also present "+ count)
+        console.log("Generally, SFMs start with a backslash character \\ , but is not found in line "+ count+".")
     }
     else{
-        console.log("no")
-    }
   
-    //object element for each line
-    var data = {} ;
-    var dataArr = line.split("\\");
-    dataArr = dataArr.splice(1, dataArr.length);
-    // if the line is not empty
-    if(dataArr.length != 0){
-      //marker and values from each line
-      data.marker = dataArr[0].split(" ")[0] ; 
-     
-      // check if values null after each marker
-      // this works for lines which only contains a single marker with no text following eg: \p
-      if(dataArr[0].split(/^[^ ]+ /)[1] !== undefined){
-        data.value = dataArr[0].split(/^[^ ]+ /)[1]
-      }
-      else{
-        data.value = "null";
-      }
-      if (data.marker == 'v'){
-        data.number = dataArr[0].split(" ")[1]; 
-        data.value = dataArr[0].split(/\d+ /)[1];
-      }
-      
-      // handle inline markers as children of the corresponding line
-      data.children = [];
+        //object element for each line
+        var data = {} ;
+        var dataArr = line.split("\\");
+        dataArr = dataArr.splice(1, dataArr.length);
+        // if the line is not empty
+        if(dataArr.length != 0){
+          //marker and values from each line
+          data.marker = dataArr[0].split(" ")[0] ; 
+         
+          // check if values null after each marker
+          // this works for lines which only contains a single marker with no text following eg: \p
+          if(dataArr[0].split(/^[^ ]+ /)[1] !== undefined){
+            data.value = dataArr[0].split(/^[^ ]+ /)[1]
+          }
+          else{
+            data.value = "null";
+          }
+          if (data.marker == 'v'){
+            data.number = dataArr[0].split(" ")[1]; 
+            data.value = dataArr[0].split(/\d+ /)[1];
+          }
+          
+          // handle inline markers as children of the corresponding line
+          data.children = [];
 
-      if(dataArr.length > 1){
-        childArr = dataArr.slice(1);
-        //inline markers structure starts from here
-        for (var j = 0; j < childArr.length; j++) {
-          let split = childArr[j].split(" ");
-          // object for inline markers
-          // ternary operator handles if only markers exist with out any values
-          data.children.push({
-            marker: split[0],
-            value: ((split[1] == "" ||split[1] == undefined) ? "null" : split.slice(1).join(" "))
-          });
+          if(dataArr.length > 1){
+            childArr = dataArr.slice(1);
+            //inline markers structure starts from here
+            for (var j = 0; j < childArr.length; j++) {
+              let split = childArr[j].split(" ");
+              // object for inline markers
+              // ternary operator handles if only markers exist with out any values
+              data.children.push({
+                marker: split[0],
+                value: ((split[1] == "" ||split[1] == undefined) ? "null" : split.slice(1).join(" "))
+              });
+            }
+          }
+          else{
+            data.children = "null";
+          }
+          // count holds the line numbers in each line
+          data.count = count;
+          lines.push(data);  
         }
-      }
-      else{
-        data.children = "null";
-      }
-      // count holds the line numbers in each line
-      data.count = count;
-      lines.push(data);  
     }
   })
   .on('error', function(){
@@ -78,7 +77,7 @@ var s = fs.createReadStream(input)
   .on('end', function(){
     // usfmValidate.Validate(lines)
     check.findMarker(lines)
-    console.log(lines)
+    // console.log(lines)
   })
   );
 
