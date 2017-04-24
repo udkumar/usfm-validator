@@ -3,16 +3,38 @@ var validator = require('./validator.js');
 var result = [];
 
 var markerOccurOnce = ["id", "ide", "h", "toc1", "toc2", "toc3", "mt"],
-		markerRepeating = ["p", "c", "v"];
+		markerRepeating = ["p", "c", "v", "s5"];
 
-exports.findMarker = function(lines){
+var temp = [];
+exports.findMarker = function(lines){	
 	for (var i = 0; i < lines.length; i++) {
 		var marker = lines[i].marker;
 		var line = lines[i];
-
+		temp.push(marker.trim())
 		checkMarker(marker, line);	
 	}
+	console.log(temp);
 }
+
+var uniqueArr = [];
+var commonArr = [];
+for (var i in temp) {
+    if (i in markerOccurOnce) {
+        commonArr.push(temp[i]); // push the common elements
+
+        delete markerOccurOnce[i]; // delete so in the end objArray2 will only have unique elements
+    }
+    else {
+        uniqueArr.push(temp[i]); // push unique element from objArray1
+    }
+}
+
+for (var i in markerOccurOnce) { // now objArray2 has only unique values, just append then to uniqueArray
+    uniqueArr.push(markerOccurOnce[i])
+}
+
+console.log('Unique array', uniqueArr);
+console.log('Common array', commonArr);
 
 var tag_id = 0,
 	tag_ide = 0,
@@ -29,6 +51,8 @@ var invalid_id = false,
 	invalid_toc2 = false,
 	invalid_toc3 = false,
 	invalid_mt = false;
+
+
 
 function checkMarker(marker, line){
 	if((marker === 'id')){
@@ -52,9 +76,8 @@ function checkMarker(marker, line){
 	else {
 		if((tag_id == 0)&& (invalid_id ==false)){
 			invalid_id = true;
-			console.log("id is not present in this file")
+			console.log("id is not present in this")
 		}
-
 	}
 
 	if((marker === 'ide')){
@@ -135,41 +158,6 @@ function checkMarker(marker, line){
 		
 	}
 
-	// if(($.inArray("ide", markerOccurOnce) !== -1 ) && (tag_ide == 0)){
-	// 	count = line.count;
-	// 	tag_ide ++;
-	// }
-	// else if((tag_ide == 1)){
-	// 	count = line.count;
-	// 	tag_ide ++;
-	// 	console.log("ide is available in multiple times");
-	// }
-	// else if(tag_id == 0){
-	// 	tag_id ++;
-	// 	tag_id_marker = marker;
-	// 	console.log(marker + "is not available");
-	// }
-
-	// if( ($.inArray("ide", markerOccurOnce) !== -1 ) && (tag_ide == 0)) {
-	// 	tag_ide ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("h", markerOccurOnce) !== -1 ) && (tag_h == 0)) {
-	// 	tag_h ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("toc1", markerOccurOnce) !== -1 ) && (tag_toc1 == 0)) {
-	// 	tag_toc1 ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("toc2", markerOccurOnce) !== -1 ) && (tag_toc2 == 0)) {
-	// 	tag_toc2 ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("toc3", markerOccurOnce) !== -1 ) && (tag_toc3 == 0)) {
-	// 	tag_toc3 ++;
-	//   console.log("found");
-	// }
 
 
 	// if((marker === 'id') && (tag_id == 0)){
