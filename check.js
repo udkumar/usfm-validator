@@ -10,31 +10,38 @@ exports.findMarker = function(lines){
 	for (var i = 0; i < lines.length; i++) {
 		var marker = lines[i].marker;
 		var line = lines[i];
-		temp.push(marker.trim())
-		checkMarker(marker, line);	
+		temp.push(marker)
+		checkMarker(marker, line);
+
 	}
 	console.log(temp);
+	
+	// var uniqueArr = [];
+	// var commonArr = [];
+	// for (var i in temp) {
+	//     if (i in markerOccurOnce) {
+	//         commonArr.push(temp[i]); // push the common elements
+
+	//         delete markerOccurOnce[i]; // delete so in the end objArray2 will only have unique elements
+	//     }
+	//     else {
+	//         uniqueArr.push(temp[i]); // push unique element from objArray1
+	//     }
+	// }
+
+	// for (var i in markerOccurOnce) { // now objArray2 has only unique values, just append then to uniqueArray
+	//     uniqueArr.push(markerOccurOnce[i])
+	// }
+
+	// console.log('Unique array', uniqueArr);
+	// console.log('Common array', commonArr);
+	
+	// in A but not in B
+	
+// console.log(temp);
+
 }
 
-var uniqueArr = [];
-var commonArr = [];
-for (var i in temp) {
-    if (i in markerOccurOnce) {
-        commonArr.push(temp[i]); // push the common elements
-
-        delete markerOccurOnce[i]; // delete so in the end objArray2 will only have unique elements
-    }
-    else {
-        uniqueArr.push(temp[i]); // push unique element from objArray1
-    }
-}
-
-for (var i in markerOccurOnce) { // now objArray2 has only unique values, just append then to uniqueArray
-    uniqueArr.push(markerOccurOnce[i])
-}
-
-console.log('Unique array', uniqueArr);
-console.log('Common array', commonArr);
 
 var tag_id = 0,
 	tag_ide = 0,
