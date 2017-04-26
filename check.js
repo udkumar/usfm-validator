@@ -21,15 +21,15 @@ function doSomething(){
 }
 
 exports.findMarker = function(lines){
-	test = [ { marker: 'ide', value: 'UTF-8', children: 'null', count: 1 }]
-
-	testArray = 'ide' in test;
-
+	// var id_word = lines[0].value.split(" ")[0];
+	// console.log( /^[A-Z]/.test( id_word ) );
 	for (var i = 0; i < lines.length; i++) {
+
 		var marker = lines[i].marker;
 		var line = lines[i];
-		checkMarker(marker, line, lines);	
+		checkMarker(marker, line);	
 	}
+	
 }
 
 var tag_id = 0,
@@ -48,8 +48,9 @@ var invalid_id = false,
 	invalid_toc3 = false,
 	invalid_mt = false;
 
-function checkMarker(marker, line, lines){
-	console.log(lines);
+function checkMarker(marker, line){
+	validateMarker(line.marker);
+
 	if((marker === 'id')){
 		count = line.count;
 		tag_id ++;
@@ -60,8 +61,8 @@ function checkMarker(marker, line, lines){
 		invalid_id = true;
 		console.log("id is available in multiple times");
 	}
-	else if($.inArray("id", lines) !== -1){
-		console.log("hellooooo");
+	else{
+		
 	}
 
 	if((marker === 'ide')){
@@ -217,5 +218,18 @@ function checkMarker(marker, line, lines){
   // 	result.push("\\ide marker is not found "+ line.count)
   // 	tag_ide ++;
   // }
+}
+
+function validateMarker(marker){
+	if ($.inArray(marker, markerOccurOnce) > -1 ){
+		// console.log("kkkkkk");
+	}
+	// console.log(marker);
+	if(marker !== "ide"){
+		// console.log("okkkkk");
+	}
+	if($.inArray("ide", marker) !== -1 ){
+		// console.lg("gooodddd");
+	}
 }
 
