@@ -10,36 +10,15 @@ exports.findMarker = function(lines){
 	for (var i = 0; i < lines.length; i++) {
 		var marker = lines[i].marker;
 		var line = lines[i];
-		temp.push(marker)
-		checkMarker(marker, line);
-
+		temp.push(marker.split().join(" "))	
 	}
-	console.log(temp);
-	
-	// var uniqueArr = [];
-	// var commonArr = [];
-	// for (var i in temp) {
-	//     if (i in markerOccurOnce) {
-	//         commonArr.push(temp[i]); // push the common elements
-
-	//         delete markerOccurOnce[i]; // delete so in the end objArray2 will only have unique elements
-	//     }
-	//     else {
-	//         uniqueArr.push(temp[i]); // push unique element from objArray1
-	//     }
-	// }
-
-	// for (var i in markerOccurOnce) { // now objArray2 has only unique values, just append then to uniqueArray
-	//     uniqueArr.push(markerOccurOnce[i])
-	// }
-
-	// console.log('Unique array', uniqueArr);
-	// console.log('Common array', commonArr);
-	
-	// in A but not in B
-	
-// console.log(temp);
-
+	checkMarker(marker, line);
+	// finding missing markers from comparing markerOccuronce with temp
+	var missingMarkersArr;
+	var missingMarkerOccurOnce = markerOccurOnce.filter(v => temp.indexOf(v) == -1);
+	var missingMarkerRepeating = markerRepeating.filter(v => temp.indexOf(v) == -1);
+	var missingMarkersArr = missingMarkerOccurOnce.concat(missingMarkerRepeating)
+	console.log("missing markers from file: "+missingMarkersArr)
 }
 
 
@@ -81,10 +60,10 @@ function checkMarker(marker, line){
 		console.log("id is available in multiple times "+count);
 	}
 	else {
-		if((tag_id == 0)&& (invalid_id ==false)){
-			invalid_id = true;
-			console.log("id is not present in this")
-		}
+		// if((tag_id == 0)&& (invalid_id ==false)){
+		// 	invalid_id = true;
+		// 	console.log("id is not present in this")
+		// }
 	}
 
 	if((marker === 'ide')){
