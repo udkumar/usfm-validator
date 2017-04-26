@@ -14,7 +14,13 @@
   "author": "Bridgeconn",
   "license": "MIT",
   "dependencies": {
+    "find-in-files": "^0.4.0",
+    "firstline": "^1.2.1",
+    "jfile": "^1.1.12",
     "jquery": "^3.2.1",
-    "jsdom": "^9.12.0"
+    "jsdom": "^9.12.0",
+    "line-stream-util": "^1.2.0",
+    "q": "^1.5.0",
+    "string-search": "^1.2.0"
   }
 }
