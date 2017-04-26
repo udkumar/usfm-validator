@@ -1,13 +1,53 @@
 var fs = require('fs')
     , util = require('util')
     , stream = require('stream')
-    , es = require('event-stream');
+    , es = require('event-stream')
+    , sutil = require('line-stream-util')
+    , findInFiles = require('find-in-files')
+    , JFile=require('jfile')
+    , stringSearcher = require('string-search');
 
 var usfmValidate = require('./usfmValidate.js')
 var check = require('./check.js')
 
 var input = './Tests/3JN.usfm';
+// fs.readFile(input, function (err, data) {
+//   if (err) throw err;
+//   if(data.indexOf('\\id') >= 0){
+//    console.log(data)
+//   }
+// });
+// fs.createReadStream(input)
+//   .pipe(sutil.split()) // split lines
+//   .setEncoding('utf8')
+//   .on('data', console.log)
 
+// fs.readFile(input, function(err, cont) {
+//     if (err)
+//         throw err;
+//     console.log("String"+(cont.indexOf("id")>-1 ? " " : " not ")+"found");
+// });
+
+// findInFiles.find("", input, '\\ide')
+//     .then(function(results) {
+//         for (var result in results) {
+//             var res = results[result];
+//             console.log(
+//                 'found "' + res.matches[0] + '" ' + res.count
+//                 + ' times in "' + result + '"'
+//             );
+//         }
+//     });
+
+// var txtFile=new JFile(input);
+// var result=txtFile.grep("id");
+// console.log(result);
+
+stringSearcher.find("\\id MAT Unlocked Literal Bible, Literal", 'Literal')
+  .then(function(resultArr) {
+    console.log(resultArr);
+    //resultArr => [ {line: 1, text: 'This is the string to search text in'} ] 
+  });
 var lines = [];
 var count = 0;
 
