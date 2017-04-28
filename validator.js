@@ -12,7 +12,6 @@ var lines = [];
 var count = 0;
 
 var s = fs.createReadStream(input)
-
   .pipe(es.split())
   .pipe(es.mapSync(function(line){
     count ++; 
