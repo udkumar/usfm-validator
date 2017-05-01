@@ -11,8 +11,9 @@ exports.findMarker = function(lines){
 		var marker = lines[i].marker;
 		var line = lines[i];
 		temp.push(marker.split().join(" "))	
+		checkMarker(marker, line);
 	}
-	checkMarker(marker, line);
+	
 	// finding missing markers from comparing markerOccuronce with temp
 	// var missingMarkersArr;
 	var missingMarkerOccurOnce = markerOccurOnce.filter(v => temp.indexOf(v) == -1);
@@ -46,6 +47,7 @@ var verseNum = [],
 	chapNum = [];
 
 function checkMarker(marker, line){
+	// console.log(line)
 	if((marker === 'id')){
 		// if marker is found then check the validation for the marker value
 		count = line.count;
@@ -67,7 +69,7 @@ function checkMarker(marker, line){
 	
 	if((marker === 'ide')){
 		count = line.count;
-		var markerIde = lines.value;
+		var markerIde = line.value;
 		var regEx = /(UTF-8|UTF-16|CP-1252|CP-1251)/;
 
 		if((!markerIde.match(regEx))&& (tag_ide === 0)){
@@ -137,30 +139,32 @@ function checkMarker(marker, line){
 		console.log("mt is available in multiple times");
 	}
 
-	//marker \\c check
-    if(marker === 'c'){
-        var markerChapter = line.value;
-        count = line.count;
-        chapNum.push(markerChapter);
-        tag_c ++;
-        chapterCheck();
-        console.log(chapNum)
-    }
+	// //marker \\c check
+ //    if(marker === 'c'){
+ //    	console.log("Hello here is a chapter")
+ //        var markerChapter = line.value;
+ //        console.log(markerChapter)
+ //        count = line.count;
+ //        chapNum.push(markerChapter);
+ //        tag_c ++;
+ //        // chapterCheck();
+ //        console.log(chapNum)
+ //    }
 
-    //marker \\p check
-    if(marker === 'p'){
-        var markerPara = line.value;
-        count = line.count;
-        tag_p ++;
-    }
+ //    //marker \\p check
+ //    if(marker === 'p'){
+ //        var markerPara = line.value;
+ //        count = line.count;
+ //        tag_p ++;
+ //    }
 
-    //marker \\v check
-    if(marker === 'v'){
-        var markerVerse = line.number;
-        count = line.count;
-        verseNum.push(markerVerse);
-        tag_v ++;
-    }
+ //    //marker \\v check
+ //    if(marker === 'v'){
+ //        var markerVerse = line.number;
+ //        count = line.count;
+ //        verseNum.push(markerVerse);
+ //        tag_v ++;
+ //    }
 
 }
 
@@ -175,13 +179,13 @@ function chapterCheck(){
         }
     }
 }
-// verse number order check
-//missing verse number
-var missing;
-for(j=1; j <= verseNum.length; j++){
-    if(verseNum[j-1]!= j){
-        missing = j;
-        console.log( "The missing Verse number is " + missing)
-    }
-}
+// // verse number order check
+// //missing verse number
+// var missing;
+// for(j=1; j <= verseNum.length; j++){
+//     if(verseNum[j-1]!= j){
+//         missing = j;
+//         console.log( "The missing Verse number is " + missing)
+//     }
+// }
 
