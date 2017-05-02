@@ -1,3 +1,4 @@
+function check(){
 var validator = require('./validator.js');
 
 var result = [];
@@ -189,3 +190,6 @@ function chapterCheck(){
 //     }
 // }
 
+}
+
+module.exports = check;
