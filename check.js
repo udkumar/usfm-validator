@@ -1,30 +1,30 @@
-var validator = require('./validator.js');
+var getUsfm = require('./getUsfm.js');
+
 var result = [];
 
 var markerOccurOnce = ["id", "ide", "h", "toc1", "toc2", "toc3", "mt"],
-		markerRepeating = ["p", "c", "v"];
+	markerRepeating = ["p", "c", "v", "s5"];
 
-var tag_id = 0;
-var $;
-
-require("jsdom").env("", function(err, window) {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  $ = require("jquery")(window);
-  doSomething();
-});
-
-function doSomething(){
-  var deferred = $.Deferred();
-}
-
-exports.findMarker = function(lines){
+var temp = [];
+exports.findMarker = function(lines){	
 	for (var i = 0; i < lines.length; i++) {
 		var marker = lines[i].marker;
 		var line = lines[i];
-		checkMarker(marker, line);	
+		temp.push(marker.split().join(" "))	
+		checkMarker(marker, line);
+	}
+	
+	// finding missing markers from comparing markerOccuronce with temp
+	var missingMarkerOccurOnce = markerOccurOnce.filter(v => temp.indexOf(v) == -1);
+	var missingMarkerRepeating = markerRepeating.filter(v => temp.indexOf(v) == -1);
+	var missingMarkersArr = missingMarkerOccurOnce.concat(missingMarkerRepeating)
+	if(missingMarkersArr.length == 1){
+		console.log("Error: Missing markers from the given files is "+missingMarkersArr)
+	}
+	else{
+		if(missingMarkersArr > 1){
+		console.log("Error: Missing markers from the given files are "+missingMarkersArr)
+		}
 	}
 }
 
@@ -34,7 +34,10 @@ var tag_id = 0,
 	tag_toc1 = 0,
 	tag_toc2 = 0,
 	tag_toc3 = 0,
-	tag_mt = 0;
+	tag_mt = 0,
+	tag_c = 0,
+	tag_p = 0,
+	tag_v = 0;
 
 var invalid_id = false,
 	invalid_ide = false,
@@ -44,32 +47,45 @@ var invalid_id = false,
 	invalid_toc3 = false,
 	invalid_mt = false;
 
+var verseNum = [],
+	chapNum = [];
+
 function checkMarker(marker, line){
+	// console.log(line)
 	if((marker === 'id')){
+		// if marker is found then check the validation for the marker value
 		count = line.count;
+		var markerID = line.value.split(" ")[0];
+     	var regEx = /(\d[A-Z]{2})|(\w[A-Z]{2})/;
+
+     	if ((!markerID.match(regEx))&& (tag_id === 0)){
+       		console.log("Warning: The \\id marker is not validated according to minimum usfm requirement in line "+count+" ---> "+"'"+markerID+"'");
+	       	console.log("The CODE is a standard 3 letter scripture book abbreviation found here:");
+	       	console.log("http://ubsicap.github.io/usfm/identification/books.html");   	
+     	}
 		tag_id ++;
 	}
 	else if((tag_id == 2)){
 		count = line.count;
 		tag_id ++;
-		invalid_id = true;
-		console.log("id is available in multiple times");
+		console.log("id is available in multiple times "+count);
 	}
-	else {
-
-	}
-
+	
 	if((marker === 'ide')){
 		count = line.count;
+		var markerIde = line.value;
+		var regEx = /(UTF-8|UTF-16|CP-1252|CP-1251)/;
+
+		if((!markerIde.match(regEx))&& (tag_ide === 0)){
+                console.log("Error: The \\ide marker should contain a character encoding specification in line "+ count);
+            }
 		tag_ide ++;
 	}
 	else if((tag_ide == 2)){
 		count = line.count;
 		tag_ide ++;
 		invalid_ide = true;
-		console.log("ide is available in multiple times");
-	}else{
-
+		console.log("Error: Marker ide is showing more than one times....");
 	}
 
 	if((marker === 'h')){
@@ -81,11 +97,9 @@ function checkMarker(marker, line){
 		tag_h ++;
 		invalid_h = true;
 		console.log("h is available in multiple times");
-	}else{
-		
 	}
 
-	if((marker === 'tag_toc1')){
+	if((marker === 'toc1')){
 		count = line.count;
 		tag_toc1 ++;
 	}
@@ -94,11 +108,9 @@ function checkMarker(marker, line){
 		tag_toc1 ++;
 		invalid_toc1 = true;
 		console.log("toc1 is available in multiple times");
-	}else{
-		
 	}
 
-	if((marker === 'tag_toc2')){
+	if((marker === 'toc2')){
 		count = line.count;
 		tag_toc2 ++;
 	}
@@ -107,11 +119,9 @@ function checkMarker(marker, line){
 		tag_toc2 ++;
 		invalid_toc2 = true;
 		console.log("toc2 is available in multiple times");
-	}else{
-		
 	}
 
-	if((marker === 'tag_toc3')){
+	if((marker === 'toc3')){
 		count = line.count;
 		tag_toc3 ++;
 	}
@@ -120,8 +130,6 @@ function checkMarker(marker, line){
 		tag_toc3 ++;
 		invalid_toc3 = true;
 		console.log("toc3 is available in multiple times");
-	}else{
-		
 	}
 
 	if((marker === 'mt')){
@@ -133,84 +141,56 @@ function checkMarker(marker, line){
 		tag_mt ++;
 		invalid_mt = true;
 		console.log("mt is available in multiple times");
-	}else{
-		
 	}
 
-	// if(($.inArray("ide", markerOccurOnce) !== -1 ) && (tag_ide == 0)){
-	// 	count = line.count;
-	// 	tag_ide ++;
-	// }
-	// else if((tag_ide == 1)){
-	// 	count = line.count;
-	// 	tag_ide ++;
-	// 	console.log("ide is available in multiple times");
-	// }
-	// else if(tag_id == 0){
-	// 	tag_id ++;
-	// 	tag_id_marker = marker;
-	// 	console.log(marker + "is not available");
-	// }
+	// //marker \\c check
+ //    if(marker === 'c'){
+ //    	console.log("Hello here is a chapter")
+ //        var markerChapter = line.value;
+ //        console.log(markerChapter)
+ //        count = line.count;
+ //        chapNum.push(markerChapter);
+ //        tag_c ++;
+ //        // chapterCheck();
+ //        console.log(chapNum)
+ //    }
 
-	// if( ($.inArray("ide", markerOccurOnce) !== -1 ) && (tag_ide == 0)) {
-	// 	tag_ide ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("h", markerOccurOnce) !== -1 ) && (tag_h == 0)) {
-	// 	tag_h ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("toc1", markerOccurOnce) !== -1 ) && (tag_toc1 == 0)) {
-	// 	tag_toc1 ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("toc2", markerOccurOnce) !== -1 ) && (tag_toc2 == 0)) {
-	// 	tag_toc2 ++;
-	//   console.log("found");
-	// }
-	// if( ($.inArray("toc3", markerOccurOnce) !== -1 ) && (tag_toc3 == 0)) {
-	// 	tag_toc3 ++;
-	//   console.log("found");
-	// }
+ //    //marker \\p check
+ //    if(marker === 'p'){
+ //        var markerPara = line.value;
+ //        count = line.count;
+ //        tag_p ++;
+ //    }
 
+ //    //marker \\v check
+ //    if(marker === 'v'){
+ //        var markerVerse = line.number;
+ //        count = line.count;
+ //        verseNum.push(markerVerse);
+ //        tag_v ++;
+ //    }
 
-	// if((marker === 'id') && (tag_id == 0)){
- //   	var markerID = line.value.split(" ")[0];
- //   	count = line.count;
- //   	var regEx = /(\d[A-Z]{2})|(\w[A-Z]{2})/;
-
- //   	if (markerID.match(regEx)){
- //   		result.push("Info: The \\id marker "+ markerID +" found in line "+ count)
- //   	}else{
- //     	result.push("Warning: The \\id marker is not validated according to minimum usfm requirement--->"+"'"+markerID+"'");
- //     	result.push("The CODE is a standard 3 letter scripture book abbreviation found here:");
- //     	result.push("http://ubsicap.github.io/usfm/identification/books.html");
- //   	}
-	// 	tag_id++;     	
-	// }else if((marker === 'id') && (tag_id > 1)) {
- //     result.push("Error: The marker \\id is found repeating in line "+ count)
- // 	}else if((marker != 'id') && (tag_id == 0)) {
- // 		result.push("Error: The initial USFM marker in any scripture text file is \\id and it is not found");
- // 		tag_id++;
- // 	}
-
- 	// if((marker === 'ide') && (tag_ide == 0)){
-  //   var markerIde = line.value;
-  //   count = line.count;
-  //   var regEx = /(UTF-8|UTF-16|CP-1252|CP-1251)/;
-
-  //   if(markerIde.match(regEx)){
-  //     result.push("Info: The \\ide marker is "+"'"+ markerIde +"'"+" found in line "+ count);
-  //   }
-  //   else{
-  //     result.push("Error: The \\ide marker should contain a character encoding specification in line "+ count)
-  //   }
-  //   tag_ide ++;
-  // }else if((marker === 'ide') && (tag_ide > 0)){
-  //  		result.push("Error: Marker ide is showing more than one times....in line " + line.count);
-  // }else if((marker != 'ide') && (tag_ide == 0)){
-  // 	result.push("\\ide marker is not found "+ line.count)
-  // 	tag_ide ++;
-  // }
 }
+
+// chapter number order check
+//missing chapter number
+// function chapterCheck(){
+//     var missing;
+//     for(j=1; j <= chapNum.length; j++){
+//         if(chapNum[j-1]!= j){
+//             missing = j;
+//             console.log( "The missing Chapter number is " + missing)
+//         }
+//     }
+// }
+// // verse number order check
+// //missing verse number
+// var missing;
+// for(j=1; j <= verseNum.length; j++){
+//     if(verseNum[j-1]!= j){
+//         missing = j;
+//         console.log( "The missing Verse number is " + missing)
+//     }
+// }
+
 
