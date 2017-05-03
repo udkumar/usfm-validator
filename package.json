@@ -12,5 +12,8 @@
     "Scriptures"
   ],
   "author": "Bridgeconn",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "event-stream": "^3.3.4"
+  }
 }
