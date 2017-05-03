@@ -1,5 +1,4 @@
-function check(){
-var validator = require('./validator.js');
+var getUsfm = require('./getUsfm.js');
 
 var result = [];
 
@@ -16,12 +15,16 @@ exports.findMarker = function(lines){
 	}
 	
 	// finding missing markers from comparing markerOccuronce with temp
-	// var missingMarkersArr;
 	var missingMarkerOccurOnce = markerOccurOnce.filter(v => temp.indexOf(v) == -1);
 	var missingMarkerRepeating = markerRepeating.filter(v => temp.indexOf(v) == -1);
 	var missingMarkersArr = missingMarkerOccurOnce.concat(missingMarkerRepeating)
-	if(!missingMarkersArr.length == 0){
-		console.log("missing markers from the given files are "+missingMarkersArr)
+	if(missingMarkersArr.length == 1){
+		console.log("Error: Missing markers from the given files is "+missingMarkersArr)
+	}
+	else{
+		if(missingMarkersArr > 1){
+		console.log("Error: Missing markers from the given files are "+missingMarkersArr)
+		}
 	}
 }
 
@@ -171,15 +174,15 @@ function checkMarker(marker, line){
 
 // chapter number order check
 //missing chapter number
-function chapterCheck(){
-    var missing;
-    for(j=1; j <= chapNum.length; j++){
-        if(chapNum[j-1]!= j){
-            missing = j;
-            console.log( "The missing Chapter number is " + missing)
-        }
-    }
-}
+// function chapterCheck(){
+//     var missing;
+//     for(j=1; j <= chapNum.length; j++){
+//         if(chapNum[j-1]!= j){
+//             missing = j;
+//             console.log( "The missing Chapter number is " + missing)
+//         }
+//     }
+// }
 // // verse number order check
 // //missing verse number
 // var missing;
@@ -190,6 +193,4 @@ function chapterCheck(){
 //     }
 // }
 
-}
 
-module.exports = check;
