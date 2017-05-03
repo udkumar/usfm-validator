@@ -1,6 +1,6 @@
 {
   "name": "usfm-validator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A library function that validates usfm file.",
   "main": "index.js",
   "scripts": {
