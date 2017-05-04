@@ -4,10 +4,10 @@ A library function which validates USFM files for minimum USFM requirements.
 
 ### Sources
 
-**USFM Documentation**
+**USFM Documentation** 
 http://ubsicap.github.io/usfm/
 
-**Minimum USFM Requirements**
+**Minimum USFM Requirements** 
 https://git.door43.org/Door43/ContentTechs/wiki/Minimum-USFM-Requirements
 	
 ### Setup
@@ -16,7 +16,5 @@ https://git.door43.org/Door43/ContentTechs/wiki/Minimum-USFM-Requirements
 ## Usage
 	var usfm = require('usfm-validator');
 	//check usfm file
-	var validateUsfm = usfm.getUsfm(/**USFM file path**/);
+	var validate = usfm.validateUsfm(/**USFM file path**/);
 
-### Run the app
-1. `node index.js`
